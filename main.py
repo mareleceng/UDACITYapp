@@ -47,7 +47,7 @@ def valid_email(email):
          
 class Signup(Handler):
     def get(self):
-        self.render("signup.html")
+        self.render('signup.html')
     def post(self):
         have_error = False
         username = self.request.get('username') 
@@ -72,18 +72,18 @@ class Signup(Handler):
 
         if  have_error:    
             self.render('signup.html', ** params)
-        else:           
-            self.redirect('/welcome?username=')
+        else:       
+            self.redirect('/welcome?username='+username)
           
 class Welcome(Handler):
-    def post(self):
-            username= self.request.post('username=')
-    def get(self):
-            username= self.request.get('username')
-            if username:
-               self.render('welcome.html', username=username)
+      def get(self):
+           username = self.request.get('username')
+           if not valid_username(username):
+               self.redirect('/') 
+           else:
+               self.render('welcome.html', username =username)
                
 app = webapp2.WSGIApplication([('/', Signup),
-                              ('/welcome', Welcome)],                            
+                                ('/welcome', Welcome)],                            
                             debug=True)  
 
